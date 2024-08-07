@@ -30,6 +30,8 @@ func NewHandler(q *pgstore.Queries) http.Handler {
 	r := chi.NewRouter()
 	r.Use(middleware.RequestID, middleware.Recoverer, middleware.Logger)
 
+	r.Get("/subscribe/{room_id}", a.handleSubscribe)
+
 	r.Route("/api", func(r chi.Router) {
 		r.Route("/rooms", func(r chi.Router) {
 			r.Post("/", a.handleCreateRoom)
@@ -53,6 +55,7 @@ func NewHandler(q *pgstore.Queries) http.Handler {
 	return a
 }
 
+func (h apiHandler) handleSubscribe(w http.ResponseWriter, r *http.Request)                 {}
 func (h apiHandler) handleCreateRoom(w http.ResponseWriter, r *http.Request)                {}
 func (h apiHandler) handleGetRooms(w http.ResponseWriter, r *http.Request)                  {}
 func (h apiHandler) handleGetRoomsMessages(w http.ResponseWriter, r *http.Request)          {}
