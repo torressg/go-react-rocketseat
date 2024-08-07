@@ -6,12 +6,14 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
+	"github.com/gorilla/websocket"
 	"github.com/torressg/go-react-rocketseat/internal/store/pgstore/pgstore"
 )
 
 type apiHandler struct {
-	q *pgstore.Queries
-	r *chi.Mux
+	q        *pgstore.Queries
+	r        *chi.Mux
+	upgrader websocket.Upgrader
 }
 
 // ServeHTTP implements http.Handler.
@@ -25,7 +27,8 @@ func (h apiHandler) ServerHTTP(w http.ResponseWriter, r *http.Request) {
 
 func NewHandler(q *pgstore.Queries) http.Handler {
 	a := apiHandler{
-		q: q,
+		q:        q,
+		upgrader: websocket.Upgrader{CheckOrigin: func(r *http.Request) bool { return true }},
 	}
 
 	r := chi.NewRouter()
@@ -65,7 +68,9 @@ func NewHandler(q *pgstore.Queries) http.Handler {
 	return a
 }
 
-func (h apiHandler) handleSubscribe(w http.ResponseWriter, r *http.Request)                 {}
+func (h apiHandler) handleSubscribe(w http.ResponseWriter, r *http.Request) {
+
+}
 func (h apiHandler) handleCreateRoom(w http.ResponseWriter, r *http.Request)                {}
 func (h apiHandler) handleGetRooms(w http.ResponseWriter, r *http.Request)                  {}
 func (h apiHandler) handleGetRoomsMessages(w http.ResponseWriter, r *http.Request)          {}
